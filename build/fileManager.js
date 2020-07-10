@@ -83,6 +83,19 @@ var FileManager = /** @class */ (function () {
         });
     };
     /**
+     * Read contents of a file synchronously.
+     *
+     * @param filePath
+     * @param encoding
+     */
+    FileManager.prototype.readFileSync = function (filePath, encoding) {
+        if (encoding === void 0) { encoding = "utf8"; }
+        if (this.fileExists(filePath)) {
+            return fs_1.default.readFileSync(filePath, { encoding: encoding }).toString();
+        }
+        return "";
+    };
+    /**
      * Returns the file stats of the given path.
      *
      * @param path

@@ -53,6 +53,20 @@ export class FileManager {
     }
 
     /**
+     * Read contents of a file synchronously.
+     * 
+     * @param filePath 
+     * @param encoding 
+     */
+    public readFileSync(filePath: string, encoding: string = "utf8"): string {
+
+        if (this.fileExists(filePath)) {
+            return fs.readFileSync(filePath, { encoding }).toString();
+        }
+        return "";
+    }
+
+    /**
      * Returns the file stats of the given path.
      * 
      * @param path 
