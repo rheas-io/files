@@ -1,4 +1,6 @@
-import { ServiceProvider } from "@rheas/core";
+import { FileManager } from "./fileManager";
+import { IApp } from "@rheas/contracts/core";
+import { ServiceProvider } from "@rheas/services";
 
 export class FilesServiceProvider extends ServiceProvider {
 
@@ -11,7 +13,7 @@ export class FilesServiceProvider extends ServiceProvider {
     public register() {
 
         this.container.singleton(this.name, app => {
-
+            return new FileManager(app as IApp);
         });
     }
 

@@ -1,4 +1,4 @@
-import { ServiceProvider } from "@rheas/core";
+import { ServiceProvider } from "@rheas/services";
 export declare class FilesServiceProvider extends ServiceProvider {
     /**
      * Registers the file handler class on the app instance.

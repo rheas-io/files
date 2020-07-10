@@ -14,7 +14,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FilesServiceProvider = void 0;
-var core_1 = require("@rheas/core");
+var fileManager_1 = require("./fileManager");
+var services_1 = require("@rheas/services");
 var FilesServiceProvider = /** @class */ (function (_super) {
     __extends(FilesServiceProvider, _super);
     function FilesServiceProvider() {
@@ -28,8 +29,9 @@ var FilesServiceProvider = /** @class */ (function (_super) {
      */
     FilesServiceProvider.prototype.register = function () {
         this.container.singleton(this.name, function (app) {
+            return new fileManager_1.FileManager(app);
         });
     };
     return FilesServiceProvider;
-}(core_1.ServiceProvider));
+}(services_1.ServiceProvider));
 exports.FilesServiceProvider = FilesServiceProvider;
