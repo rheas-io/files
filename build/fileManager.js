@@ -42,14 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileManager = void 0;
 var fs_1 = __importDefault(require("fs"));
 var FileManager = /** @class */ (function () {
-    /**
-     * Creates a new file manager which is responsible for
-     * creating, deleting, read, write operations on a file.
-     *
-     * @param app
-     */
-    function FileManager(app) {
-        this._app = app;
+    function FileManager() {
     }
     /**
      * Reads a JS file and returns the specified export module.

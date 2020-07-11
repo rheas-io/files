@@ -1,20 +1,6 @@
 /// <reference types="node" />
 import { Stats } from "fs";
-import { IApp } from "@rheas/contracts/core";
 export declare class FileManager {
-    /**
-     * Application instance.
-     *
-     * @var IApp
-     */
-    protected _app: IApp;
-    /**
-     * Creates a new file manager which is responsible for
-     * creating, deleting, read, write operations on a file.
-     *
-     * @param app
-     */
-    constructor(app: IApp);
     /**
      * Reads a JS file and returns the specified export module.
      *
