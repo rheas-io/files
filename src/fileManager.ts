@@ -1,14 +1,13 @@
-import fs, { Stats } from "fs";
+import fs, { Stats } from 'fs';
 
 export class FileManager {
-
     /**
      * Reads a JS file and returns the specified export module.
-     * 
-     * @param filePath 
-     * @param module 
+     *
+     * @param filePath
+     * @param module
      */
-    public readJsFile(filePath: string, module: string = "default"): any {
+    public readJsFile(filePath: string, module: string = 'default'): any {
         if (this.fileExists(filePath)) {
             return require(filePath)[module];
         }
@@ -18,12 +17,11 @@ export class FileManager {
     /**
      * Read contents of a file and returns as string. Throws an exception if
      * an error occurs when reading
-     * 
-     * @param filePath 
-     * @param encoding 
+     *
+     * @param filePath
+     * @param encoding
      */
-    public readFile(filePath: string, encoding: string = "utf8"): Promise<string> {
-
+    public readFile(filePath: string, encoding: string = 'utf8'): Promise<string> {
         return new Promise<string>((resolve, reject) => {
             fs.readFile(filePath, { encoding }, (err, data) => {
                 if (err !== null) {
@@ -36,22 +34,21 @@ export class FileManager {
 
     /**
      * Read contents of a file synchronously.
-     * 
-     * @param filePath 
-     * @param encoding 
+     *
+     * @param filePath
+     * @param encoding
      */
-    public readFileSync(filePath: string, encoding: string = "utf8"): string {
-
+    public readFileSync(filePath: string, encoding: string = 'utf8'): string {
         if (this.fileExists(filePath)) {
             return fs.readFileSync(filePath, { encoding }).toString();
         }
-        return "";
+        return '';
     }
 
     /**
      * Returns the file stats of the given path.
-     * 
-     * @param path 
+     *
+     * @param path
      */
     public fileStats(path: string): Promise<Stats> {
         return new Promise<Stats>((resolve, reject) => {
@@ -66,8 +63,8 @@ export class FileManager {
 
     /**
      * Checks if a file exists or not.
-     * 
-     * @param filePath 
+     *
+     * @param filePath
      */
     public async fileExists(filePath: string): Promise<boolean> {
         try {
@@ -81,8 +78,8 @@ export class FileManager {
 
     /**
      * Checks if a directory exists or not.
-     * 
-     * @param dirPath 
+     *
+     * @param dirPath
      */
     public async directoryExists(dirPath: string): Promise<boolean> {
         try {
@@ -93,5 +90,4 @@ export class FileManager {
             return false;
         }
     }
-
 }
