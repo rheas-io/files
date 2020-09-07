@@ -72,6 +72,19 @@ export class FileManager {
     }
 
     /**
+     * Blocking file stats getter.
+     *
+     * @param path
+     */
+    public fileStatsSync(path: string): Stats | undefined {
+        try {
+            return fs.lstatSync(path);
+        } catch (err) {}
+
+        return undefined;
+    }
+
+    /**
      * Checks if a file exists or not.
      *
      * @param filePath
@@ -87,6 +100,20 @@ export class FileManager {
     }
 
     /**
+     * Returns true if a file exists. Blocking function.
+     *
+     * @param filePath
+     */
+    public fileExistsSync(filePath: string): boolean {
+        const fileStats = this.fileStatsSync(filePath);
+
+        if (fileStats === undefined) {
+            return false;
+        }
+        return fileStats.isFile();
+    }
+
+    /**
      * Checks if a directory exists or not.
      *
      * @param dirPath
@@ -99,5 +126,19 @@ export class FileManager {
         } catch (err) {
             return false;
         }
+    }
+
+    /**
+     * Returns true if a directory exists. Blocking function.
+     *
+     * @param dirPath
+     */
+    public directoryExistsSync(dirPath: string): boolean {
+        const fileStats = this.fileStatsSync(dirPath);
+
+        if (fileStats === undefined) {
+            return false;
+        }
+        return fileStats.isDirectory();
     }
 }

@@ -149,20 +149,33 @@ describe('Check file manager functions', () => {
      */
     it('file exists check', async () => {
         // Valid file check
-        let fileExists = await fs.fileExists(js);
-        expect(fileExists).toBe(true);
+        expect(fs.fileExists(js)).resolves.toBe(true);
 
         // Invalid file check
-        fileExists = await fs.fileExists(falseFile);
-        expect(fileExists).toBe(false);
+        expect(fs.fileExists(falseFile)).resolves.toBe(false);
 
         // Directory check for a file exists
-        fileExists = await fs.fileExists(path.resolve(__dirname));
-        expect(fileExists).toBe(false);
+        expect(fs.fileExists(path.resolve(__dirname))).resolves.toBe(false);
 
         // Dot file should return false
-        fileExists = await fs.fileExists(path.resolve(__dirname) + '/..');
-        expect(fileExists).toBe(false);
+        expect(fs.fileExists(path.resolve(__dirname) + '/..')).resolves.toBe(false);
+    });
+
+    /**
+     * Blocking file exists check.
+     */
+    it('file exists - blocking', () => {
+        // Valid file check
+        expect(fs.fileExistsSync(js)).toBe(true);
+
+        // Invalid file check
+        expect(fs.fileExistsSync(falseFile)).toBe(false);
+
+        // Directory check for a file exists
+        expect(fs.fileExistsSync(path.resolve(__dirname))).toBe(false);
+
+        // Dot file should return false
+        expect(fs.fileExistsSync(path.resolve(__dirname) + '/..')).toBe(false);
     });
 
     /**
@@ -175,19 +188,32 @@ describe('Check file manager functions', () => {
      */
     it('directory exists check', async () => {
         // Valid directory check
-        let directoryExists = await fs.directoryExists(path.resolve(__dirname));
-        expect(directoryExists).toBe(true);
+        expect(fs.directoryExists(path.resolve(__dirname))).resolves.toBe(true);
 
         // Invalid directory check
-        directoryExists = await fs.directoryExists(falseDir);
-        expect(directoryExists).toBe(false);
+        expect(fs.directoryExists(falseDir)).resolves.toBe(false);
 
         // File check for a directory exists
-        directoryExists = await fs.directoryExists(js);
-        expect(directoryExists).toBe(false);
+        expect(fs.directoryExists(js)).resolves.toBe(false);
 
         // Dot file should return true
-        directoryExists = await fs.directoryExists(path.resolve(__dirname) + '/..');
-        expect(directoryExists).toBe(true);
+        expect(fs.directoryExists(path.resolve(__dirname) + '/..')).resolves.toBe(true);
+    });
+
+    /**
+     * Blocking dir existance check
+     */
+    it('directory exists - blocking', async () => {
+        // Valid directory check
+        expect(fs.directoryExistsSync(path.resolve(__dirname))).toBe(true);
+
+        // Invalid directory check
+        expect(fs.directoryExistsSync(falseDir)).toBe(false);
+
+        // File check for a directory exists
+        expect(fs.directoryExistsSync(js)).toBe(false);
+
+        // Dot file should return true
+        expect(fs.directoryExistsSync(path.resolve(__dirname) + '/..')).toBe(true);
     });
 });
