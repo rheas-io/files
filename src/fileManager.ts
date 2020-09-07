@@ -1,6 +1,7 @@
 import fs, { Stats } from 'fs';
+import { IFileManager } from '@rheas/contracts/files';
 
-export class FileManager {
+export class FileManager implements IFileManager {
     /**
      * Reads a JS file and returns the specified export module.
      *
@@ -36,8 +37,8 @@ export class FileManager {
      *
      * @param filePath
      */
-    public async readFileSync(filePath: string): Promise<Buffer | null> {
-        if (await this.fileExists(filePath)) {
+    public readFileSync(filePath: string): Buffer | null {
+        if (this.fileExistsSync(filePath)) {
             return fs.readFileSync(filePath);
         }
         return null;
@@ -72,19 +73,6 @@ export class FileManager {
     }
 
     /**
-     * Blocking file stats getter.
-     *
-     * @param path
-     */
-    public fileStatsSync(path: string): Stats | undefined {
-        try {
-            return fs.lstatSync(path);
-        } catch (err) {}
-
-        return undefined;
-    }
-
-    /**
      * Checks if a file exists or not.
      *
      * @param filePath
@@ -97,20 +85,6 @@ export class FileManager {
         } catch (err) {
             return false;
         }
-    }
-
-    /**
-     * Returns true if a file exists. Blocking function.
-     *
-     * @param filePath
-     */
-    public fileExistsSync(filePath: string): boolean {
-        const fileStats = this.fileStatsSync(filePath);
-
-        if (fileStats === undefined) {
-            return false;
-        }
-        return fileStats.isFile();
     }
 
     /**
@@ -129,6 +103,33 @@ export class FileManager {
     }
 
     /**
+     * Blocking file stats getter.
+     *
+     * @param path
+     */
+    public fileStatsSync(path: string): Stats | null {
+        try {
+            return fs.lstatSync(path);
+        } catch (err) {}
+
+        return null;
+    }
+
+    /**
+     * Returns true if a file exists. Blocking function.
+     *
+     * @param filePath
+     */
+    public fileExistsSync(filePath: string): boolean {
+        const fileStats = this.fileStatsSync(filePath);
+
+        if (fileStats === null) {
+            return false;
+        }
+        return fileStats.isFile();
+    }
+
+    /**
      * Returns true if a directory exists. Blocking function.
      *
      * @param dirPath
@@ -136,7 +137,7 @@ export class FileManager {
     public directoryExistsSync(dirPath: string): boolean {
         const fileStats = this.fileStatsSync(dirPath);
 
-        if (fileStats === undefined) {
+        if (fileStats === null) {
             return false;
         }
         return fileStats.isDirectory();

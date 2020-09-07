@@ -44,7 +44,7 @@ describe('Check file manager functions', () => {
         // if file does not exists.
         expect(fs.readJs(falseFile)).resolves.toBe(undefined);
 
-        // Invalid json `default` module to be undefined.
+        // Invalid json `default` module to be null.
         expect(fs.readJs(json)).resolves.toBe(undefined);
     });
 
@@ -61,8 +61,10 @@ describe('Check file manager functions', () => {
 
         // Read contents of js file
         expect(fs.readFile(js)).resolves.toBeInstanceOf(Buffer);
+
         // Read contents of json file
         expect(fs.readFile(json)).resolves.toBeInstanceOf(Buffer);
+        
         // Read contents of image file
         let filePath = path.resolve(__dirname, 'testImage.png');
         expect(fs.readFile(filePath)).resolves.toBeInstanceOf(Buffer);
@@ -81,17 +83,17 @@ describe('Check file manager functions', () => {
      */
     it('sync read file and return buffer', () => {
         // Read contents of js file
-        expect(fs.readFileSync(js)).resolves.toBeInstanceOf(Buffer);
+        expect(fs.readFileSync(js)).toBeInstanceOf(Buffer);
 
         // Read contents of json file
-        expect(fs.readFileSync(json)).resolves.toBeInstanceOf(Buffer);
+        expect(fs.readFileSync(json)).toBeInstanceOf(Buffer);
 
         // Read an image file
         let filePath = path.resolve(__dirname, 'testImage.png');
-        expect(fs.readFileSync(filePath)).resolves.toBeInstanceOf(Buffer);
+        expect(fs.readFileSync(filePath)).toBeInstanceOf(Buffer);
 
         // Read contents of non-existant file
-        expect(fs.readFileSync(falseFile)).resolves.toBe(null);
+        expect(fs.readFileSync(falseFile)).toBe(null);
     });
 
     /**
