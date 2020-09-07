@@ -16,6 +16,19 @@ export class FileManager implements IFileManager {
     }
 
     /**
+     * Reads a JS file blocking read.
+     *
+     * @param filePath
+     * @param module
+     */
+    public readJsSync(filePath: string, module: string = 'default'): undefined | any {
+        if (this.fileExistsSync(filePath)) {
+            return require(filePath)[module];
+        }
+        return undefined;
+    }
+
+    /**
      * Read contents of a file and returns a Buffer. Throws an exception if
      * an error occurs when reading
      *
@@ -37,7 +50,7 @@ export class FileManager implements IFileManager {
      *
      * @param filePath
      */
-    public readFileSync(filePath: string): Buffer{        
+    public readFileSync(filePath: string): Buffer {
         return fs.readFileSync(filePath);
     }
 

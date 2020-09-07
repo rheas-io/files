@@ -49,6 +49,30 @@ describe('Check file manager functions', () => {
     });
 
     /**
+     * JS file blocking read
+     */
+    it('js file read', () => {
+        // Read contents of js file. Reads default if no module specified.
+        expect(fs.readJsSync(js)).toHaveProperty('module', 'defaultModule');
+
+        // Calls default module
+        expect(fs.readJsSync(js, 'default')).toHaveProperty('module', 'defaultModule');
+
+        // Calls named module - testConfig
+        expect(fs.readJsSync(js, 'testConfig')).toHaveProperty('module', 'testConfig');
+
+        // Calls invalid module - abcdef
+        expect(fs.readJsSync(js, 'abcdef')).toBe(undefined);
+
+        // Calls invalid js - promise resolves to false and returns undefined
+        // if file does not exists.
+        expect(fs.readJsSync(falseFile)).toBe(undefined);
+
+        // Invalid json `default` module to be null.
+        expect(fs.readJsSync(json)).toBe(undefined);
+    });
+
+    /**
      * Tests async file reads.
      *
      * 1. Read contents of js file.
