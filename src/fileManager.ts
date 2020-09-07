@@ -7,8 +7,8 @@ export class FileManager {
      * @param filePath
      * @param module
      */
-    public readJsFile(filePath: string, module: string = 'default'): any {
-        if (this.fileExists(filePath)) {
+    public async readJs(filePath: string, module: string = 'default'): Promise<undefined | any> {
+        if (await this.fileExists(filePath)) {
             return require(filePath)[module];
         }
         return undefined;
@@ -36,11 +36,23 @@ export class FileManager {
      *
      * @param filePath
      */
-    public readFileSync(filePath: string): Buffer | null {
-        if (this.fileExists(filePath)) {
+    public async readFileSync(filePath: string): Promise<Buffer | null> {
+        if (await this.fileExists(filePath)) {
             return fs.readFileSync(filePath);
         }
         return null;
+    }
+
+    /**
+     * Reads a file and returns the string
+     *
+     * @param filePath
+     * @param encoding
+     */
+    public async readTextFile(filePath: string, encoding: string = 'utf8'): Promise<string> {
+        const contents = await this.readFile(filePath);
+
+        return contents.toString(encoding);
     }
 
     /**

@@ -27,7 +27,26 @@ describe('Check file manager functions', () => {
      * 4. Read an invalid module.
      * 5. Read an invalid file.
      */
-    it('js file read', () => {});
+    it('js file read', () => {
+        // Read contents of js file. Reads default if no module specified.
+        expect(fs.readJs(js)).resolves.toHaveProperty('module', 'defaultModule');
+
+        // Calls default module
+        expect(fs.readJs(js, 'default')).resolves.toHaveProperty('module', 'defaultModule');
+
+        // Calls named module - testConfig
+        expect(fs.readJs(js, 'testConfig')).resolves.toHaveProperty('module', 'testConfig');
+
+        // Calls invalid module - abcdef
+        expect(fs.readJs(js, 'abcdef')).resolves.toBe(undefined);
+
+        // Calls invalid js - promise resolves to false and returns undefined
+        // if file does not exists.
+        expect(fs.readJs(falseFile)).resolves.toBe(undefined);
+
+        // Invalid json `default` module to be undefined.
+        expect(fs.readJs(json)).resolves.toBe(undefined);
+    });
 
     /**
      * Tests async file reads.
@@ -37,7 +56,20 @@ describe('Check file manager functions', () => {
      * 3. Read contents of image file.
      * 4. Read contents of non-existant file.
      */
-    it('async read file and return string', () => {});
+    it('async read file and return string', () => {
+        expect(fs.readFile(js)).toBeInstanceOf(Promise);
+
+        // Read contents of js file
+        expect(fs.readFile(js)).resolves.toBeInstanceOf(Buffer);
+        // Read contents of json file
+        expect(fs.readFile(json)).resolves.toBeInstanceOf(Buffer);
+        // Read contents of image file
+        let filePath = path.resolve(__dirname, 'testImage.png');
+        expect(fs.readFile(filePath)).resolves.toBeInstanceOf(Buffer);
+
+        // Read contents of non-existant file
+        expect(fs.readFile(falseFile)).rejects.toThrow();
+    });
 
     /**
      * Tests synchronous file reads.
@@ -47,7 +79,34 @@ describe('Check file manager functions', () => {
      * 3. Read contents of image file.
      * 4. Read contents of non-existant file.
      */
-    it('async read file and return string', () => {});
+    it('sync read file and return buffer', () => {
+        // Read contents of js file
+        expect(fs.readFileSync(js)).resolves.toBeInstanceOf(Buffer);
+
+        // Read contents of json file
+        expect(fs.readFileSync(json)).resolves.toBeInstanceOf(Buffer);
+
+        // Read an image file
+        let filePath = path.resolve(__dirname, 'testImage.png');
+        expect(fs.readFileSync(filePath)).resolves.toBeInstanceOf(Buffer);
+
+        // Read contents of non-existant file
+        expect(fs.readFileSync(falseFile)).resolves.toBe(null);
+    });
+
+    /**
+     * Reads a file and converts it into a string text.
+     */
+    it('read text from file', () => {
+        // Read contents of js file
+        expect(fs.readTextFile(js)).resolves.toContain('exports.default');
+
+        // Read text of json file
+        expect(fs.readTextFile(json)).resolves.toContain('JSON');
+
+        // Read text of non-existant file
+        expect(fs.readTextFile(falseFile)).rejects.toThrow();
+    });
 
     /**
      * Tests file stats of a path.
@@ -59,26 +118,24 @@ describe('Check file manager functions', () => {
      * 5. Dot file check
      */
     it('file stats check', async () => {
-        let fileStats;
-
         // Invalid file stats - throws error
         let promise = fs.fileStats(falseFile);
-        await expect(promise).rejects.toThrow();
+        expect(promise).rejects.toThrow();
 
         // Invalid directory stats - throws error
         promise = fs.fileStats(falseDir);
-        await expect(promise).rejects.toThrow();
+        expect(promise).rejects.toThrow();
 
         // Valid file stats
         promise = fs.fileStats(json);
-        await expect(promise).resolves.not.toThrow();
+        expect(promise).resolves.not.toThrow();
 
         // Valid directory stats
         promise = fs.fileStats(path.resolve(__dirname));
-        await expect(promise).resolves.not.toThrow();
+        expect(promise).resolves.not.toThrow();
 
         // Dot file stats
-        fileStats = await fs.fileStats(path.resolve(__dirname) + '/..');
+        let fileStats = await fs.fileStats(path.resolve(__dirname) + '/..');
         expect(fileStats.isDirectory()).toBe(true);
     });
 
