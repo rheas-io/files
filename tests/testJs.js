@@ -1,10 +1,12 @@
-export const testConfig = {
+Object.defineProperty(exports, '__esModule', { value: true });
+
+exports.testConfig = {
     name: 'Rheas',
     type: 'JS',
     module: 'testConfig',
 };
 
-export default {
+exports.default = {
     name: 'Rheas',
     type: 'JS',
     module: 'defaultModule',
