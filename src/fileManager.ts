@@ -37,11 +37,8 @@ export class FileManager implements IFileManager {
      *
      * @param filePath
      */
-    public readFileSync(filePath: string): Buffer | null {
-        if (this.fileExistsSync(filePath)) {
-            return fs.readFileSync(filePath);
-        }
-        return null;
+    public readFileSync(filePath: string): Buffer{        
+        return fs.readFileSync(filePath);
     }
 
     /**
@@ -52,6 +49,18 @@ export class FileManager implements IFileManager {
      */
     public async readTextFile(filePath: string, encoding: string = 'utf8'): Promise<string> {
         const contents = await this.readFile(filePath);
+
+        return contents.toString(encoding);
+    }
+
+    /**
+     * Blocking text file read.
+     *
+     * @param filePath
+     * @param encoding
+     */
+    public readTextFileSync(filePath: string, encoding: string = 'utf8'): string {
+        const contents = this.readFileSync(filePath);
 
         return contents.toString(encoding);
     }

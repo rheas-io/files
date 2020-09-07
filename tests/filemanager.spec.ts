@@ -64,7 +64,7 @@ describe('Check file manager functions', () => {
 
         // Read contents of json file
         expect(fs.readFile(json)).resolves.toBeInstanceOf(Buffer);
-        
+
         // Read contents of image file
         let filePath = path.resolve(__dirname, 'testImage.png');
         expect(fs.readFile(filePath)).resolves.toBeInstanceOf(Buffer);
@@ -93,7 +93,9 @@ describe('Check file manager functions', () => {
         expect(fs.readFileSync(filePath)).toBeInstanceOf(Buffer);
 
         // Read contents of non-existant file
-        expect(fs.readFileSync(falseFile)).toBe(null);
+        expect(() => {
+            fs.readFileSync(falseFile);
+        }).toThrow();
     });
 
     /**
@@ -111,6 +113,22 @@ describe('Check file manager functions', () => {
     });
 
     /**
+     * Reads text blockingly.
+     */
+    it('read text from file', () => {
+        // Read contents of js file
+        expect(fs.readTextFileSync(js)).toContain('exports.default');
+
+        // Read text of json file
+        expect(fs.readTextFileSync(json)).toContain('JSON');
+
+        // Read text of non-existant file
+        expect(() => {
+            fs.readTextFileSync(falseFile);
+        }).toThrow();
+    });
+
+    /**
      * Tests file stats of a path.
      *
      * 1. Read non-existant file stat.
@@ -121,20 +139,16 @@ describe('Check file manager functions', () => {
      */
     it('file stats check', async () => {
         // Invalid file stats - throws error
-        let promise = fs.fileStats(falseFile);
-        expect(promise).rejects.toThrow();
+        expect(fs.fileStats(falseFile)).rejects.toThrow();
 
         // Invalid directory stats - throws error
-        promise = fs.fileStats(falseDir);
-        expect(promise).rejects.toThrow();
+        expect(fs.fileStats(falseDir)).rejects.toThrow();
 
         // Valid file stats
-        promise = fs.fileStats(json);
-        expect(promise).resolves.not.toThrow();
+        expect(fs.fileStats(json)).resolves.not.toThrow();
 
         // Valid directory stats
-        promise = fs.fileStats(path.resolve(__dirname));
-        expect(promise).resolves.not.toThrow();
+        expect(fs.fileStats(path.resolve(__dirname))).resolves.not.toThrow();
 
         // Dot file stats
         let fileStats = await fs.fileStats(path.resolve(__dirname) + '/..');
