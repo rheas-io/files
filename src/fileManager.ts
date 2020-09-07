@@ -15,34 +15,32 @@ export class FileManager {
     }
 
     /**
-     * Read contents of a file and returns as string. Throws an exception if
+     * Read contents of a file and returns a Buffer. Throws an exception if
      * an error occurs when reading
      *
      * @param filePath
-     * @param encoding
      */
-    public readFile(filePath: string, encoding: string = 'utf8'): Promise<string> {
-        return new Promise<string>((resolve, reject) => {
-            fs.readFile(filePath, { encoding }, (err, data) => {
+    public readFile(filePath: string): Promise<Buffer> {
+        return new Promise<Buffer>((resolve, reject) => {
+            fs.readFile(filePath, (err, data) => {
                 if (err !== null) {
                     return reject(err);
                 }
-                return resolve(data.toString());
+                return resolve(data);
             });
         });
     }
 
     /**
-     * Read contents of a file synchronously.
+     * Read contents of a file synchronously and returns the Buffer.
      *
      * @param filePath
-     * @param encoding
      */
-    public readFileSync(filePath: string, encoding: string = 'utf8'): string {
+    public readFileSync(filePath: string): Buffer | null {
         if (this.fileExists(filePath)) {
-            return fs.readFileSync(filePath, { encoding }).toString();
+            return fs.readFileSync(filePath);
         }
-        return '';
+        return null;
     }
 
     /**
