@@ -4,32 +4,6 @@ import { IFileManager } from '@rheas/contracts/files';
 
 export class FileManager implements IFileManager {
     /**
-     * Writes the given data to the file. An exception will be thrown
-     * if the path links to a directory or write fails.
-     *
-     * @param filePath
-     * @param data
-     * @param options
-     */
-    public async writeToFile(filePath: string, data: any, options: WriteFileOptions = {}) {
-        // We will throw an exception, if the given filePath is
-        // a directory. This will prevent replacing the directory with
-        // a file.
-        if (await this.directoryExists(filePath)) {
-            throw new Exception(`Path ${filePath} is a directory. Aborting data write.`);
-        }
-
-        return new Promise<boolean>((resolve, reject) => {
-            fs.writeFile(filePath, data, options, (err) => {
-                if (err !== null) {
-                    return reject(err);
-                }
-                return resolve(true);
-            });
-        });
-    }
-
-    /**
      * Reads a JS file and returns the specified export module.
      *
      * @param filePath
@@ -103,6 +77,56 @@ export class FileManager implements IFileManager {
         const contents = this.readFileSync(filePath);
 
         return contents.toString(encoding);
+    }
+
+    /**
+     * Writes the given data to the file. An exception will be thrown
+     * if the path links to a directory or write fails.
+     *
+     * @param filePath
+     * @param data
+     * @param options
+     */
+    public async writeToFile(filePath: string, data: any, options: WriteFileOptions = {}) {
+        // We will throw an exception, if the given filePath is
+        // a directory. This will prevent replacing the directory with
+        // a file.
+        if (await this.directoryExists(filePath)) {
+            throw new Exception(`Path ${filePath} is a directory. Aborting data write.`);
+        }
+
+        return new Promise<boolean>((resolve, reject) => {
+            fs.writeFile(filePath, data, options, (err) => {
+                if (err !== null) {
+                    return reject(err);
+                }
+                return resolve(true);
+            });
+        });
+    }
+    
+    /**
+     * Deletes a file from the filesystem. Only files can be deleted
+     * using this function and trying to delete a directory will throw
+     * an exception.
+     *
+     * @param filePath
+     */
+    public async remove(filePath: string): Promise<boolean> {
+        // We will throw an exception, if the given filePath is
+        // a directory.
+        if (await this.directoryExists(filePath)) {
+            throw new Exception(`Path ${filePath} is a directory. Aborting delete request.`);
+        }
+
+        return new Promise<boolean>((resolve, reject) => {
+            fs.unlink(filePath, (err) => {
+                if (err !== null) {
+                    return reject(err);
+                }
+                return resolve(true);
+            });
+        });
     }
 
     /**
