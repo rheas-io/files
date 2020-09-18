@@ -104,7 +104,7 @@ export class FileManager implements IFileManager {
             });
         });
     }
-    
+
     /**
      * Deletes a file from the filesystem. Only files can be deleted
      * using this function and trying to delete a directory will throw
@@ -214,5 +214,19 @@ export class FileManager implements IFileManager {
             return false;
         }
         return fileStats.isDirectory();
+    }
+
+    /**
+     * Makes a directory if it does not exists. By default, directory
+     * is recursively created.
+     *
+     * @param path
+     * @param recursive
+     */
+    public mkDirSync(path: string, mode: number = 0o777) {
+        if (this.directoryExistsSync(path)) {
+            return true;
+        }
+        fs.mkdirSync(path, { mode, recursive: true });
     }
 }
