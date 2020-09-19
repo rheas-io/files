@@ -155,9 +155,9 @@ export class FileManager implements IFileManager {
             const stats = await this.fileStats(filePath);
 
             return stats.isFile();
-        } catch (err) {
-            return false;
-        }
+        } catch (err) {}
+
+        return false;
     }
 
     /**
@@ -170,9 +170,9 @@ export class FileManager implements IFileManager {
             const stats = await this.fileStats(dirPath);
 
             return stats.isDirectory();
-        } catch (err) {
-            return false;
-        }
+        } catch (err) {}
+
+        return false;
     }
 
     /**
@@ -196,10 +196,7 @@ export class FileManager implements IFileManager {
     public fileExistsSync(filePath: string): boolean {
         const fileStats = this.fileStatsSync(filePath);
 
-        if (fileStats === null) {
-            return false;
-        }
-        return fileStats.isFile();
+        return !!fileStats && fileStats.isFile();
     }
 
     /**
@@ -210,23 +207,33 @@ export class FileManager implements IFileManager {
     public directoryExistsSync(dirPath: string): boolean {
         const fileStats = this.fileStatsSync(dirPath);
 
-        if (fileStats === null) {
-            return false;
-        }
-        return fileStats.isDirectory();
+        return !!fileStats && fileStats.isDirectory();
     }
 
     /**
-     * Makes a directory if it does not exists. By default, directory
-     * is recursively created.
+     * Creates a directory recursively, if it does not exists. This function
+     * is synhronous/blocking.
      *
      * @param path
      * @param recursive
      */
-    public mkDirSync(path: string, mode: number = 0o777) {
-        if (this.directoryExistsSync(path)) {
-            return true;
-        }
+    public mkdirSync(path: string, mode: number = 0o777) {
         fs.mkdirSync(path, { mode, recursive: true });
+    }
+
+    /**
+     * Returns the path of all the files/directory in the directory.
+     * 
+     * Returns an empty string if the directory does not exist or any other
+     * error gets thrown.
+     *
+     * @param srcDir
+     */
+    public dirContents(srcDir: string): string[] {
+        try {
+            return fs.readdirSync(srcDir);
+        } catch (err) {}
+
+        return [];
     }
 }
