@@ -17,20 +17,20 @@
   ],
   "scripts": {
     "tsc": "tsc",
-    "test": "jest",
-    "coverage": "jest --coverage",
+    "test": "jest --verbose",
+    "coverage": "jest --verbose --coverage",
     "copypackage": "cp -rf package.json build",
     "build": "tsc && npm run copypackage",
     "copypackage_dev": "cp -rf package.json build_dev",
     "build-dev": "tsc --outDir ./build_dev && npm run copypackage_dev"
   },
   "devDependencies": {
-    "@types/jest": "^25.2.1",
-    "@types/node": "^13.13.2",
     "@rheas/contracts": "^0.0.1",
     "@rheas/errors": "^0.0.1",
-    "jest": "^25.4.0",
-    "ts-jest": "^25.4.0",
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.13.2",
+    "jest": "^26.5.2",
+    "ts-jest": "^26.4.1",
     "typescript": "^3.8.3"
   },
   "repository": {
